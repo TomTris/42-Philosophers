@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:03:28 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/26 23:09:23 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/27 00:12:15 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,6 @@ static void	ft_philo_set2(t_philo *philo, int group_sum)
 	int	i;
 
 	i = 0;
-	philo[0].group_sum = group_sum;
-	philo[0].group = group_sum;
-	philo[0].die = 0;
 	while (++i <= philo[0].nbr)
 	{
 		philo[i].group_sum = group_sum;
@@ -79,6 +76,9 @@ static int	ft_philo_set(t_philo *philo)
 	group_sum = 3;
 	if (philo[0].nbr % 2 == 0)
 		group_sum = 2;
+	philo[0].group_sum = group_sum;
+	philo[0].group = group_sum;
+	philo[0].die = 0;
 	ft_philo_set2(philo, group_sum);
 	return (1);
 }
