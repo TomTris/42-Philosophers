@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:41:57 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/26 21:17:42 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/26 23:01:26 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo
 	int					nbr;
 	int					sum;
 	int					group;
+	int					group_sum;
 	int					ate_times;
 	struct timeval		start;
 	struct timeval		end;
@@ -48,5 +49,8 @@ typedef struct s_philo
 
 t_fork_mutex	*ft_fork_fill(t_philo *philo);
 t_philo			*ft_philo_fill(int ac, char **av);
+int				ft_time_count(t_philo *philo_i);
+struct timeval	*ft_print_out(t_philo *philo_i, char *str);
+
 
 #endif

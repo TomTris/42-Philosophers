@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:03:28 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/26 21:33:59 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/26 23:09:23 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,20 @@ static int	ft_char_to_nbr(char *str)
 	return (sum);
 }
 
-static void	ft_philo_set2(t_philo *philo, int group)
+static void	ft_philo_set2(t_philo *philo, int group_sum)
 {
-	int				i;
+	int	i;
 
-	if (philo[0].nbr % 2 == 0)
-		group = 2;
 	i = 0;
+	philo[0].group_sum = group_sum;
+	philo[0].group = group_sum;
+	philo[0].die = 0;
 	while (++i <= philo[0].nbr)
 	{
+		philo[i].group_sum = group_sum;
+		philo[i].group = 1;
+		if (i % 2 == 0)
+			philo[i].group = 2;
 		philo[i].die = 0;
 		philo[i].ate_times = 0;
 		philo[i].must_eat = philo[0].must_eat;
@@ -56,31 +61,25 @@ static void	ft_philo_set2(t_philo *philo, int group)
 		philo[i].time_die = philo[0].time_die;
 		philo[i].time_eat = philo[0].time_eat;
 		philo[i].time_sleep = philo[0].time_sleep;
-		philo[i].group = 1;
-		philo[i].mutex_die = philo[0].mutex_die;
 		philo[i].mutex_print = philo[0].mutex_print;
-		if (i % 2 == 0)
-			philo[i].group = 2;
 	}
-	if (group == 3)
+	if (group_sum == 3)
 		philo[--i].group = 3;
-	philo[0].die = 0;
 }
 
 static int	ft_philo_set(t_philo *philo)
 {
 	pthread_mutex_t	*mutex_print;
-	pthread_mutex_t	*mutex_die;
+	int				group_sum;
 
 	mutex_print = (pthread_mutex_t *)malloc(2 * sizeof(pthread_mutex_t));
 	if (mutex_print == 0)
 		return (0);
-	mutex_die = (pthread_mutex_t *)malloc(2 * sizeof(pthread_mutex_t));
-	if (mutex_die == 0)
-		return (free(mutex_print), 0);
 	pthread_mutex_init(mutex_print, NULL);
-	pthread_mutex_init(mutex_die, NULL);
-	ft_philo_set2(philo, 3);
+	group_sum = 3;
+	if (philo[0].nbr % 2 == 0)
+		group_sum = 2;
+	ft_philo_set2(philo, group_sum);
 	return (1);
 }
 
@@ -105,10 +104,8 @@ t_philo	*ft_philo_fill(int ac, char **av)
 	philo[0].time_sleep = ft_char_to_nbr(av[4]);
 	philo[0].must_eat = ft_char_to_nbr(av[5]);
 	if (philo[0].time_die < 0 || philo[0].time_eat < 0
-		|| philo[0].time_sleep < 0)
+		|| philo[0].time_sleep < 0 || philo[0].must_eat == -2)
 		return (free(philo), ft_usage(), NULL);
-	if (philo[0].must_eat == -2)
-		return (free(philo), NULL);
 	if (ft_philo_set(philo) == 0)
 		return (free(philo), NULL);
 	return (philo);
