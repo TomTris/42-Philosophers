@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:27 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/27 00:09:43 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/27 12:26:59 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,21 @@
 
 static void	ft_philo_job_alone(void *param)
 {
-	t_philo	*philo;
+	t_philo	*philo_1;
 	int		time_cnt;
 
-	philo = (t_philo *)param;
-	gettimeofday(&philo->start, NULL);
-	pthread_mutex_lock(&philo->psfork[1].mutex);
+	philo_1 = (t_philo *)param;
+	gettimeofday(&philo_1[0].start, NULL);
+	pthread_mutex_lock(&philo_1[0].psfork[1].mutex);
 	printf("0 1 took a fork\n");
 	while (1)
 	{
-		gettimeofday(&philo->end, NULL);
-		time_cnt = (philo->end.tv_usec - philo->start.tv_usec) / 1000;
-		if (time_cnt >= philo->time_die)
+		gettimeofday(&philo_1[0].end, NULL);
+		time_cnt = (philo_1[0].end.tv_usec - philo_1[0].start.tv_usec) / 1000;
+		if (time_cnt >= philo_1[0].time_die)
 		{
 			printf("%d 1 die\n", time_cnt);
-			pthread_mutex_unlock(&philo->psfork[1].mutex);
+			pthread_mutex_unlock(&philo_1[0].psfork[1].mutex);
 			break ;
 		}
 	}
@@ -64,9 +64,13 @@ static void	ft_check_die(t_philo *philo, int philo_sum)
 void	ft_philo_job(void *philo_data)
 {
 	t_philo	*philo_i;
-	int		time_cnt;
 
-
+	philo_i = (t_philo *)philo_data;
+	gettimeofday(&philo_i[0].time_to_die, NULL);
+	if (philo_i[0].group_sum == 2)
+		ft_philo_job_groupsum2(philo_i);
+	else
+		ft_philo_job_groupsum3(philo_i);
 }
 
 void	ft_philo_create(t_philo *philo, pthread_t *philo_id)

@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:38:35 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/27 00:09:02 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/27 11:04:28 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,5 @@ int	main(int ac, char **av)
 			free(philo_id), 1);
 	ft_philo_create(philo, philo_id);
 	return (ft_destroy_n_free_pthread_mutex_psfork(philo),
-			free(philo_id), 0);
+		free(philo_id), 0);
 }
