@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:03:28 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/27 00:12:15 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/27 13:20:49 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ static int	ft_char_to_nbr(char *str)
 	int	i;
 	int	sum;
 
-	i = 0;
 	if (str == 0)
 		return (-1);
 	sum = 0;
+	i = -1;
 	while (str[++i])
 	{
 		if (str[i] < '0' || str[i] > '9')
@@ -76,13 +76,13 @@ static int	ft_philo_set(t_philo *philo)
 	group_sum = 3;
 	if (philo[0].nbr % 2 == 0)
 		group_sum = 2;
+	philo[0].mutex_print = mutex_print;
 	philo[0].group_sum = group_sum;
 	philo[0].group = group_sum;
 	philo[0].die = 0;
 	ft_philo_set2(philo, group_sum);
 	return (1);
 }
-
 
 t_philo	*ft_philo_fill(int ac, char **av)
 {
@@ -92,7 +92,7 @@ t_philo	*ft_philo_fill(int ac, char **av)
 	if (ac < 5 || ac > 6)
 		ft_usage();
 	philo_sum = ft_char_to_nbr(av[1]);
-	if (philo_sum < 0)
+	if (philo_sum <= 0)
 		return (0);
 	philo = (t_philo *)malloc((philo_sum + 1) * sizeof(t_philo));
 	if (philo == 0)
@@ -108,5 +108,6 @@ t_philo	*ft_philo_fill(int ac, char **av)
 		return (free(philo), ft_usage(), NULL);
 	if (ft_philo_set(philo) == 0)
 		return (free(philo), NULL);
+	philo[0].psfork = 0;
 	return (philo);
 }

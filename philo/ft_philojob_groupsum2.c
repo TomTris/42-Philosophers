@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:10:18 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/27 12:30:56 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/27 13:00:39 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	ft_philojob_groupsum2_group1_eat(t_philo *philo_i)
 		if (ft_cnt_time_of_acti(philo_i) >= philo_i[0].time_sleep)
 			break ;
 	}
-	ft_philojob_groupsum2_group1_1(philo_i);
+	ft_philojob_groupsum2_group1(philo_i);
 }
 
 //wait for forks, take forks, start eating.
@@ -75,6 +75,7 @@ static void	ft_philojob_groupsum2_group2_eat(t_philo *philo_i)
 		if (ft_cnt_time_of_acti(philo_i) >= philo_i[0].time_eat)
 		{
 			gettimeofday(&philo_i[0].start, NULL);
+			gettimeofday(&philo_i[0].time_to_die, NULL);
 			ft_print_out(philo_i, "finish eating");
 			pthread_mutex_unlock(&philo_i[0].psfork[philo_i[0].nbr].mutex);
 			pthread_mutex_unlock(&philo_i[0].psfork[philo_i[0].nbr - 1].mutex);

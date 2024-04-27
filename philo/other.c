@@ -6,22 +6,26 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:55 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/27 12:10:20 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/27 14:04:25 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philolib.h"
 
-int	ft_cnt_time_to_die(t_philo *philo_i)
+long int	ft_cnt_time_to_die(t_philo *philo_i)
 {
-	gettimeofday(&philo_i[0].end, NULL);
-	return ((philo_i[0].end.tv_usec - philo_i[0].time_to_die.tv_usec) / 1000);
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	return (((now.tv_usec - philo_i[0].time_to_die.tv_usec) / 1000
+		+ (now.tv_sec - philo_i[0].time_to_die.tv_sec) * 1000));
 }
 
-int	ft_cnt_time_of_acti(t_philo *philo_i)
+long int	ft_cnt_time_of_acti(t_philo *philo_i)
 {
 	gettimeofday(&philo_i[0].end, NULL);
-	return ((philo_i[0].end.tv_usec - philo_i[0].start.tv_usec) / 1000);
+	return (((philo_i[0].end.tv_usec - philo_i[0].start.tv_usec) / 1000)
+		+ (philo_i[0].end.tv_sec - philo_i[0].start.tv_sec) * 1000);
 }
 
 struct timeval	*ft_print_out(t_philo *philo_i, char *str)
@@ -42,7 +46,9 @@ struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 		pthread_mutex_lock(philo_i[0].mutex_print);
 		gettimeofday(&now, NULL);
 		if (philo_i[0].die == 0)
-			printf("%d %d %s\n", (now.tv_usec - begin->tv_usec) / 1000,
+			printf("%ld %d %s\n",
+				(((now.tv_sec - begin->tv_sec) * 1000)
+					+ ((now.tv_usec - begin->tv_usec) / 1000)),
 				philo_i[0].nbr, str);
 		pthread_mutex_unlock(philo_i[0].mutex_print);
 	}
