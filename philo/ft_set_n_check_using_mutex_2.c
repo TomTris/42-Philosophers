@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:55 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 13:22:56 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/28 17:44:04 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,29 @@ void	ft_set_start_time(t_philo *philo_i)
 long int	ft_cnt_time_of_acti(t_philo *philo_i)
 {
 	struct timeval	now;
+	long int		time;
 
+	pthread_mutex_lock(&philo_i[0].mutex_start[0].mutex);
 	gettimeofday(&now, NULL);
-	return (((now.tv_usec - philo_i[0].start.tv_usec) / 1000)
-		+ (now.tv_sec - philo_i[0].start.tv_sec) * 1000);
+	time = ((now.tv_usec - philo_i[0].start.tv_usec) / 1000)
+		+ ((now.tv_sec - philo_i[0].start.tv_sec) * 1000);
+	pthread_mutex_unlock(&philo_i[0].mutex_start[0].mutex);
+	return (time);
 }
 
-void	ft_set_time_to_die(t_philo *philo_i)
+int	ft_check_ate_times(t_philo *philo_i)
 {
-	pthread_mutex_lock(&philo_i[0].mutex_time_to_die[0].mutex);
-	gettimeofday(&philo_i[0].time_to_die, NULL);
-	pthread_mutex_unlock(&philo_i[0].mutex_time_to_die[0].mutex);
+	int	ret;
+
+	pthread_mutex_lock(&philo_i[0].mutex_ate_times[0].mutex);
+	ret = philo_i[0].ate_times;
+	pthread_mutex_unlock(&philo_i[0].mutex_ate_times[0].mutex);
+	return (ret);
 }
 
-long int	ft_cnt_time_to_die(t_philo *philo_i)
+void	ft_set_ate_times(t_philo *philo_i)
 {
-	struct timeval	now;
-
-	gettimeofday(&now, NULL);
-	return (((now.tv_usec - philo_i[0].time_to_die.tv_usec) / 1000)
-		+ ((now.tv_sec - philo_i[0].time_to_die.tv_sec) * 1000));
+	pthread_mutex_lock(&philo_i[0].mutex_ate_times[0].mutex);
+	philo_i[0].mutex_ate_times++;
+	pthread_mutex_unlock(&philo_i[0].mutex_ate_times[0].mutex);
 }

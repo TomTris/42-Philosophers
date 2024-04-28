@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:03:28 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 13:44:54 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/28 16:58:22 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	ft_philo_set2(t_philo *philo)
 		philo[i].time_sleep = philo[0].time_sleep;
 		philo[i].mutex_print = philo[0].mutex_print;
 	}
-	philo[--i].group = 3;
+	philo[--i].group = philo[0].group_sum;
 }
 
 static int	ft_philo_set(t_philo *philo)
