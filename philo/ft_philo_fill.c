@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:03:28 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/27 13:20:49 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/28 13:44:54 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ static int	ft_char_to_nbr(char *str)
 	return (sum);
 }
 
-static void	ft_philo_set2(t_philo *philo, int group_sum)
+static void	ft_philo_set2(t_philo *philo)
 {
 	int	i;
 
 	i = 0;
-	while (++i <= philo[0].nbr)
+	while (++i <= philo[0].sum)
 	{
-		philo[i].group_sum = group_sum;
+		philo[i].group_sum = philo[0].group_sum;
 		philo[i].group = 1;
 		if (i % 2 == 0)
 			philo[i].group = 2;
@@ -60,30 +60,25 @@ static void	ft_philo_set2(t_philo *philo, int group_sum)
 		philo[i].time_sleep = philo[0].time_sleep;
 		philo[i].mutex_print = philo[0].mutex_print;
 	}
-	if (group_sum == 3)
-		philo[--i].group = 3;
+	philo[--i].group = 3;
 }
 
 static int	ft_philo_set(t_philo *philo)
 {
-	pthread_mutex_t	*mutex_print;
-	int				group_sum;
-
-	mutex_print = (pthread_mutex_t *)malloc(2 * sizeof(pthread_mutex_t));
-	if (mutex_print == 0)
+	philo[0].philo_id = (pthread_t *)malloc
+		((philo[0].sum + 1) * sizeof(pthread_t));
+	if (philo[0].philo_id == 0)
 		return (0);
-	pthread_mutex_init(mutex_print, NULL);
-	group_sum = 3;
-	if (philo[0].nbr % 2 == 0)
-		group_sum = 2;
-	philo[0].mutex_print = mutex_print;
-	philo[0].group_sum = group_sum;
-	philo[0].group = group_sum;
+	philo[0].group_sum = 3;
+	if (philo[0].sum % 2 == 0)
+		philo[0].group_sum = 2;
+	philo[0].group = philo[0].group_sum;
 	philo[0].die = 0;
-	ft_philo_set2(philo, group_sum);
+	ft_philo_set2(philo);
 	return (1);
 }
 
+//set everything, to it's value, but no mutex.
 t_philo	*ft_philo_fill(int ac, char **av)
 {
 	t_philo	*philo;
@@ -98,7 +93,7 @@ t_philo	*ft_philo_fill(int ac, char **av)
 	if (philo == 0)
 		return (0);
 	philo[0].sum = philo_sum;
-	philo[0].nbr = philo_sum;
+	philo[0].nbr = 0;
 	philo[0].time_die = ft_char_to_nbr(av[2]);
 	philo[0].time_eat = ft_char_to_nbr(av[3]);
 	philo[0].time_sleep = ft_char_to_nbr(av[4]);
@@ -108,6 +103,5 @@ t_philo	*ft_philo_fill(int ac, char **av)
 		return (free(philo), ft_usage(), NULL);
 	if (ft_philo_set(philo) == 0)
 		return (free(philo), NULL);
-	philo[0].psfork = 0;
 	return (philo);
 }
