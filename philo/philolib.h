@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:41:57 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 16:14:14 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/28 23:16:48 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ void			ft_philojob_groupsum2(t_philo *philo_i);
 void			ft_philojob_groupsum3(t_philo *philo_i);
 
 void			ft_set_time_to_die(t_philo *philo_i);
-long int		ft_cnt_time_to_die(t_philo *philo_i);
+double			ft_cnt_time_to_die(t_philo *philo_i);
 int				ft_check_die_philo(t_philo *philo_i);
 struct timeval	*ft_print_out(t_philo *philo_i, char *str);
 void			ft_set_start_time(t_philo *philo_i);
-long int		ft_cnt_time_of_acti(t_philo *philo_i);
+double			ft_cnt_time_of_acti(t_philo *philo_i);
 
 
 

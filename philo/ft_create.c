@@ -6,13 +6,14 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:27 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 17:41:34 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/28 22:35:37 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philolib.h"
 
-// static void	ft_print_n_set_die_super(t_philo *philo, int i_die);
+static void	ft_print_n_set_die_super(t_philo *philo, int i_die);
+
 static void	ft_philo_job_alone(void *param)
 {
 	t_philo				*philo_1;
@@ -39,57 +40,93 @@ static void	ft_philo_job_alone(void *param)
 	}
 }
 
-// static void	ft_check_die_super(t_philo *philo)
-// {
-// 	int	i;
+static void	ft_check_die_super(t_philo *philo)
+{
+	int		i;
+	double	time;
 
-// 	i = 0;
-// 	while (++i <= philo[0].sum)
-// 	{
-// 		pthread_mutex_lock(&philo[0].mutex_time_to_die[i].mutex);
-// 		if (philo[i].die == 1
-// 			|| ft_cnt_time_to_die(&philo[i]) >= philo[0].time_die)
-// 		{
-// 			ft_print_n_set_die_super(philo, i);
-// 			pthread_mutex_unlock(&philo[0].mutex_time_to_die[i].mutex);
-// 			break ;
-// 		}
-// 		pthread_mutex_unlock(&philo[0].mutex_time_to_die[i].mutex);
-// 	}
-// }
+	i = 0;
+	while (++i <= philo[0].sum)
+	{
+		pthread_mutex_lock(&(philo[0].mutex_time_to_die[i].mutex));
+		time = ft_cnt_time_to_die(&(philo[i]));
+		if (time > (double) philo[0].time_die)
+		{
+			pthread_mutex_lock(philo[0].mutex_print);
+			ft_print_n_set_die_super(philo, i);
+			pthread_mutex_unlock(&(philo[0].mutex_time_to_die[i].mutex));
+			break ;
+		}
+		pthread_mutex_unlock((&philo[0].mutex_time_to_die[i].mutex));
+		if (i == philo[0].sum)
+			i = 0;
+	}
+}
 
-// static void	ft_print_n_set_die_super(t_philo *philo, int i_die)
-// {
-// 	int	i;
+static void	ft_print_n_set_die_super(t_philo *philo, int i_die)
+{
+	int				i;
+	struct timeval	*begin;
+	struct timeval	now;
 
-// 	pthread_mutex_lock(philo[0].mutex_print);
-// 	printf("%d die\n", i_die);
-// 	i = 0;
-// 	while (++i <= philo[0].sum)
-// 		pthread_mutex_lock(&philo[i].mutex_die[0].mutex);
-// 	i = 0;
-// 	while (++i <= philo[0].sum)
-// 	{
-// 		philo[i].die = 1;
-// 		pthread_mutex_unlock(&philo[i].mutex_die[0].mutex);
-// 	}
-// 	pthread_mutex_unlock(philo[0].mutex_print);
-// }
+	begin = ft_print_out(NULL, NULL);
+	gettimeofday(&now, NULL);
+	printf("%ld %d die\n", ((now.tv_sec - begin->tv_sec) * 1000)
+		+ ((now.tv_usec - begin->tv_usec) / 1000), i_die);
+	i = 0;
+	while (++i <= philo[0].sum)
+		pthread_mutex_lock(&philo[i].mutex_die[0].mutex);
+	i = 0;
+	while (++i <= philo[0].sum)
+	{
+		philo[i].die = 1;
+		pthread_mutex_unlock(&philo[i].mutex_die[0].mutex);
+	}
+	pthread_mutex_unlock(philo[0].mutex_print);
+}
 
 static void	ft_philo_job(void *philo_data)
 {
 	t_philo			*philo_i;
-	struct timeval	*begin;
 
 	philo_i = (t_philo *)philo_data;
-	begin = ft_print_out(NULL, NULL);
-	philo_i[0].time_to_die = *begin;
 	if (philo_i[0].group_sum == 2)
 	{
 		ft_philojob_groupsum2(philo_i);
 	}
 	else
 		ft_philojob_groupsum3(philo_i);
+}
+
+
+int	ft_philo_create(t_philo *philo, pthread_t *philo_id)
+{
+	int				i;
+	struct timeval	*begin;
+
+	if (philo[0].sum == 1)
+	{
+		pthread_create(&philo_id[1], NULL, (void *)&ft_philo_job_alone,
+			(void *)&philo[1]);
+		return (pthread_join(philo_id[1], NULL), 1);
+	}
+	begin = ft_print_out(NULL, NULL);
+	if (begin == NULL)
+		return (0);
+	i = 0;
+	while (++i <= philo[0].sum)
+	{
+		philo[i].time_to_die = *begin;
+		pthread_create(&(philo_id[i]), NULL, (void *)&ft_philo_job,
+			(void *)&(philo[i]));
+	}
+	ft_check_die_super(philo);
+	i = 0;
+	while (++i <= philo[0].sum)
+		pthread_join(philo_id[i], NULL);
+	printf("hiere is after pthread join\n");
+	free(begin);
+	return (1);
 }
 
 // static void	ft_philo(t_philo *philo)
@@ -112,31 +149,3 @@ static void	ft_philo_job(void *philo_data)
 // 		printf("philo[%d].tsleep = %d\n",i, philo[i].time_sleep);
 // 	}
 // }
-
-int	ft_philo_create(t_philo *philo, pthread_t *philo_id)
-{
-	int				i;
-	struct timeval	*begin;
-	// ft_philo(philo);
-	if (philo[0].sum == 1)
-	{
-		pthread_create(&philo_id[1], NULL, (void *)&ft_philo_job_alone,
-			(void *)&philo[1]);
-		return (pthread_join(philo_id[1], NULL), 1);
-	}
-	begin = ft_print_out(NULL, NULL);
-	if (begin == NULL)
-		return (0);
-	i = 0;
-	while (++i <= philo[0].sum)
-	{
-		pthread_create(&(philo_id[i]), NULL, (void *)&ft_philo_job,
-			(void *)&(philo[i]));
-	}
-	i = 0;
-	while (++i <= philo[0].sum)
-		pthread_join(philo_id[i], NULL);
-	printf("hiere is after pthread join\n");
-	free(begin);
-	return (1);
-}

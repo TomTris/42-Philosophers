@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:55 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 17:44:04 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/28 22:19:57 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	ft_set_start_time(t_philo *philo_i)
 	pthread_mutex_unlock(&philo_i[0].mutex_start[0].mutex);
 }
 
-long int	ft_cnt_time_of_acti(t_philo *philo_i)
+double	ft_cnt_time_of_acti(t_philo *philo_i)
 {
 	struct timeval	now;
-	long int		time;
+	double			time;
 
 	pthread_mutex_lock(&philo_i[0].mutex_start[0].mutex);
 	gettimeofday(&now, NULL);
