@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:38:35 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 16:52:27 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/28 23:33:01 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static void	ft_destroy_n_free(t_philo *philo)
 			pthread_mutex_destroy(&philo[0].mutex_ate_times[i].mutex);
 		if (philo[0].mutex_die != 0)
 			pthread_mutex_destroy(&philo[0].mutex_die[i].mutex);
-		if (philo[0].mutex_start != 0)
-			pthread_mutex_destroy(&philo[0].mutex_start[i].mutex);
+		// if (philo[0].mutex_start != 0)
+		// 	pthread_mutex_destroy(&philo[0].mutex_start[i].mutex);
 		if (philo[0].mutex_time_to_die != 0)
 			pthread_mutex_destroy(&philo[0].mutex_time_to_die[i].mutex);
 	}
@@ -34,7 +34,7 @@ static void	ft_destroy_n_free(t_philo *philo)
 	free(philo[0].mutex_ate_times);
 	free(philo[0].mutex_die);
 	free(philo[0].mutex_print);
-	free(philo[0].mutex_start);
+	// free(philo[0].mutex_start);
 	free(philo[0].mutex_time_to_die);
 	free(philo[0].philo_id);
 	free(philo);

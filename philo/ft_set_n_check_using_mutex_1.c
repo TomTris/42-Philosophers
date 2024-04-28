@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:10:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 22:19:53 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/28 23:50:29 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	ft_check_die_philo(t_philo *philo_i)
 }
 
 
-//a philo, after eating need to check time if he's still alive, how? checkft_cnt_time_to_die
 struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 {
 	static struct timeval	*begin = NULL;
