@@ -6,27 +6,11 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 12:31:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 15:52:32 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 16:33:55 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philolib.h"
-
-// size_t  get_current_time(void)
-// {
-//     struct timeval  time;
-//     if (gettimeofday(&time, NULL) == -1)
-//         write(2, "gettimeofday() error\n", 22);
-//     return (time.tv_sec * 1000 + time.tv_usec / 1000);
-// }
-
-// void ft_usleep(size_t milliseconds)
-// {
-//     size_t  start;
-//     start = get_current_time();
-//     while ((get_current_time() - start) < milliseconds)
-//         usleep(250);
-// }
 
 void	ft_usleep(size_t dura)
 {
@@ -42,7 +26,7 @@ void	ft_usleep(size_t dura)
 	{
 		gettimeofday(&now_tv, NULL);
 		dif_us = (now_tv.tv_sec * 100000) + (now_tv.tv_usec / 10) - (start_us);
-		if (dif_us < dura - 3)
+		if (dif_us < dura)
 			usleep((dura - dif_us));
 		else
 			return ;
@@ -98,22 +82,20 @@ void	ft_philojob(void *philo_data)
 	{
 		fork_right = philo_i[0].nbr + 1;
 		ft_group(philo_i, philo_i[0].nbr, fork_right);
+		return ;
+	}
+	if (philo_i[0].nbr != philo_i[0].sum)
+		fork_right = philo_i[0].nbr + 1;
+	else
+		fork_right = 1;
+	if (philo_i[0].group == 2)
+	{
+		usleep(philo_i[0].time_eat * 500);
+		ft_group23(philo_i, philo_i[0].nbr, fork_right);
 	}
 	else
 	{
-		if (philo_i[0].nbr != philo_i[0].sum)
-			fork_right = philo_i[0].nbr + 1;
-		else
-			fork_right = 1;
-		if (philo_i[0].group == 2)
-		{
-			usleep(philo_i[0].time_eat * 500);
-			ft_group23(philo_i, philo_i[0].nbr, fork_right);
-		}
-		else
-		{
-			usleep(philo_i[0].time_eat * 1500);
-			ft_group23(philo_i, philo_i[0].nbr, fork_right);	
-		}
+		usleep(philo_i[0].time_eat * 1500);
+		ft_group23(philo_i, philo_i[0].nbr, fork_right);	
 	}
 }
