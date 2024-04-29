@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:10:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 18:12:54 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 20:49:33 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 			pthread_mutex_lock(philo_i[0].mutex_print);
 		gettimeofday(&now, NULL);
 		if (ft_check_die_philo(philo_i) == 0)
-			printf("%ld %d %s\n",
-				(((now.tv_sec - begin->tv_sec) * 1000)
+			printf("%ld %d %s\n", (((now.tv_sec - begin->tv_sec) * 1000)
 					+ ((now.tv_usec - begin->tv_usec) / 1000)),
 				philo_i[0].nbr, str);
 		if (philo_i[0].nbr != 0)
