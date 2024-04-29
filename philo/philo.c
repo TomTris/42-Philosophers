@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:38:35 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 23:33:01 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 17:58:30 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	ft_destroy_n_free(t_philo *philo)
 	{
 		if (philo[0].psfork != 0)
 			pthread_mutex_destroy(&philo[0].psfork[i].mutex);
-		if (philo[0].mutex_ate_times != 0)
-			pthread_mutex_destroy(&philo[0].mutex_ate_times[i].mutex);
+		// if (philo[0].mutex_ate_times != 0)
+		// 	pthread_mutex_destroy(&philo[0].mutex_ate_times[i].mutex);
 		if (philo[0].mutex_die != 0)
 			pthread_mutex_destroy(&philo[0].mutex_die[i].mutex);
 		// if (philo[0].mutex_start != 0)
@@ -31,6 +31,7 @@ static void	ft_destroy_n_free(t_philo *philo)
 			pthread_mutex_destroy(&philo[0].mutex_time_to_die[i].mutex);
 	}
 	pthread_mutex_destroy(philo[0].mutex_print);
+	pthread_mutex_destroy(&(philo[0].mutex_ate_times[0].mutex));
 	free(philo[0].mutex_ate_times);
 	free(philo[0].mutex_die);
 	free(philo[0].mutex_print);
@@ -49,6 +50,9 @@ int	main(int ac, char **av)
 		return (1);
 	if (ft_fork_n_mutex_fill(philo) == 0)
 		return (ft_destroy_n_free(philo), 1);
-	ft_philo_create(philo, philo[0].philo_id);
+	if (philo[0].must_eat == -1)
+		ft_philo_create_no_must_eat(philo, philo[0].philo_id);
+	else
+		ft_philo_create_with_must_eat(philo, philo[0].philo_id);
 	return (ft_destroy_n_free(philo), 1);
 }
