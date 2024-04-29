@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:41:57 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 23:31:47 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 14:46:11 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int				ft_check_die_philo(t_philo *philo_i);
 struct timeval	*ft_print_out(t_philo *philo_i, char *str);
 void			ft_set_start_time(t_philo *philo_i);
 double			ft_cnt_time_of_acti(t_philo *philo_i);
-void			ft_usleep(int time_in_milisecond);
+void	ft_philojob(void *philo_data);
 
 
 #endif

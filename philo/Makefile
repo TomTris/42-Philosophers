@@ -1,7 +1,7 @@
 NAME = philo
 CFLAGS = -Wall -Werror -Wextra
 SRC = ft_create.c ft_fork_n_mutex_fill.c ft_philo_fill.c  philo.c\
-		ft_philojob_groupsum2.c ft_philojob_groupsum3.c\
+		ft_philojob_groupsum3.c\
 		ft_set_n_check_using_mutex_1.c ft_set_n_check_using_mutex_2.c
 OBJS = $(SRC:.c=.o)
 
