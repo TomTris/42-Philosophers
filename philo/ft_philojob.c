@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_philojob_groupsum3.c                            :+:      :+:    :+:   */
+/*   ft_philojob.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 12:31:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 16:33:55 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 16:46:25 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static void	ft_group(t_philo *philo_i, int fork_left, int fork_right)
 	ft_print_out(philo_i, "is thinking");
 	ft_group(philo_i, fork_left, fork_right);
 }
-
 
 void	ft_philojob(void *philo_data)
 {

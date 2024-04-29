@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:10:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 16:37:23 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 16:45:05 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	ft_check_die_philo(t_philo *philo_i)
 	pthread_mutex_unlock(&philo_i[0].mutex_time_to_die[0].mutex);
 	return (ret);
 }
-
 
 struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 {
