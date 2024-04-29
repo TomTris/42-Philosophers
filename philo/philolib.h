@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:41:57 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 16:42:54 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 17:54:53 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,6 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef struct s_fork_mutex
-{
-	int				nbr;
-	int				used;
-	pthread_mutex_t	mutex;
-}	t_fork_mutex;
-
 typedef struct s_list_mutex
 {
 	int				nbr;
@@ -34,7 +27,7 @@ typedef struct s_list_mutex
 
 typedef struct s_philo
 {
-	t_fork_mutex		*psfork;
+	t_list_mutex		*psfork;
 	int					die;
 	t_list_mutex		*mutex_die;
 	int					nbr;
@@ -57,18 +50,18 @@ typedef struct s_philo
 int				ft_fork_n_mutex_fill(t_philo *philo);
 t_philo			*ft_philo_fill(int ac, char **av);
 
-int				ft_philo_create(t_philo *philo, pthread_t *philo_id);
+void			ft_philojob_no_must_eat(void *philo_data);
+int				ft_philo_create_no_must_eat(t_philo *philo,
+					pthread_t *philo_id);
 
-
-void			ft_philojob_groupsum2(t_philo *philo_i);
-void			ft_philojob_groupsum3(t_philo *philo_i);
+void			ft_philojob_with_must_eat(void *philo_data);
+int				ft_philo_create_with_must_eat(t_philo *philo,
+					pthread_t *philo_id);
 
 void			ft_set_time_to_die(t_philo *philo_i);
 int				ft_check_die_philo(t_philo *philo_i);
+int				ft_check_ate_times(t_philo *philo_i);
+void			ft_set_ate_times(t_philo *philo_i);
 struct timeval	*ft_print_out(t_philo *philo_i, char *str);
-void			ft_set_start_time(t_philo *philo_i);
-double			ft_cnt_time_of_acti(t_philo *philo_i);
-void	ft_philojob(void *philo_data);
-
 
 #endif

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_philojob.c                                      :+:      :+:    :+:   */
+/*   ft_philojob_with_must_eat.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/27 12:31:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 16:46:25 by qdo              ###   ########.fr       */
+/*   Created: 2024/04/29 17:15:58 by qdo               #+#    #+#             */
+/*   Updated: 2024/04/29 18:49:33 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philolib.h"
 
-void	ft_usleep(size_t dura)
+static void	ft_usleep(size_t dura)
 {
 	struct timeval	start_tv;
 	struct timeval	now_tv;
@@ -45,6 +45,8 @@ static void	ft_group23(t_philo *philo_i, int fork_left, int fork_right)
 	pthread_mutex_unlock(&philo_i[0].psfork[fork_right].mutex);
 	ft_set_time_to_die(philo_i);
 	pthread_mutex_unlock(&philo_i[0].psfork[fork_left].mutex);
+	if (++(philo_i[0].ate_times) == philo_i[0].must_eat)
+		ft_set_ate_times(philo_i);
 	ft_print_out(philo_i, "is sleeping");
 	ft_usleep(philo_i[0].time_sleep);
 	if (ft_check_die_philo(philo_i) == 1)
@@ -63,6 +65,8 @@ static void	ft_group(t_philo *philo_i, int fork_left, int fork_right)
 	pthread_mutex_unlock(&philo_i[0].psfork[fork_right].mutex);
 	ft_set_time_to_die(philo_i);
 	pthread_mutex_unlock(&philo_i[0].psfork[fork_left].mutex);
+	if (++(philo_i[0].ate_times) == philo_i[0].must_eat)
+		ft_set_ate_times(philo_i);
 	ft_print_out(philo_i, "is sleeping");
 	ft_usleep(philo_i[0].time_sleep);
 	if (ft_check_die_philo(philo_i) == 1)
@@ -71,7 +75,7 @@ static void	ft_group(t_philo *philo_i, int fork_left, int fork_right)
 	ft_group(philo_i, fork_left, fork_right);
 }
 
-void	ft_philojob(void *philo_data)
+void	ft_philojob_with_must_eat(void *philo_data)
 {
 	int				fork_right;
 	t_philo			*philo_i;

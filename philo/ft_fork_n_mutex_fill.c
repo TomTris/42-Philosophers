@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 21:07:21 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 23:32:51 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 17:55:35 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	ft_set_0(t_philo *philo)
 	philo[0].mutex_print = 0;
 	philo[0].mutex_ate_times = 0;
 	philo[0].mutex_die = 0;
-	// philo[0].mutex_start = 0;
 	philo[0].mutex_time_to_die = 0;
 	philo[0].psfork = 0;
 }
@@ -28,22 +27,18 @@ static int	ft_malloc_mutex(t_philo *philo)
 		(2 * sizeof(pthread_mutex_t));
 	if (philo[0].mutex_print == 0)
 		return (0);
-	philo[0].psfork = (t_fork_mutex *)malloc
-		((philo[0].sum + 1) * sizeof(t_fork_mutex));
-	if (philo[0].psfork == 0)
-		return (0);
 	philo[0].mutex_ate_times = (t_list_mutex *)malloc
-		((philo[0].sum + 1) * sizeof(t_list_mutex));
+		(2 * sizeof(t_list_mutex));
 	if (philo[0].mutex_ate_times == 0)
+		return (0);
+	philo[0].psfork = (t_list_mutex *)malloc
+		((philo[0].sum + 1) * sizeof(t_list_mutex));
+	if (philo[0].psfork == 0)
 		return (0);
 	philo[0].mutex_die = (t_list_mutex *)malloc
 		((philo[0].sum + 1) * sizeof(t_list_mutex));
 	if (philo[0].mutex_die == 0)
 		return (0);
-	// philo[0].mutex_start = (t_list_mutex *)malloc
-	// 	((philo[0].sum + 1) * sizeof(t_list_mutex));
-	// if (philo[0].mutex_start == 0)
-	// 	return (0);
 	philo[0].mutex_time_to_die = (t_list_mutex *)malloc
 		((philo[0].sum + 1) * sizeof(t_list_mutex));
 	if (philo[0].psfork == 0)
@@ -57,13 +52,11 @@ static int	ft_del(t_philo *philo)
 	free(philo[0].psfork);
 	free(philo[0].mutex_ate_times);
 	free(philo[0].mutex_die);
-	// free(philo[0].mutex_start);
 	free(philo[0].mutex_time_to_die);
 	philo[0].mutex_print = 0;
 	philo[0].psfork = 0;
 	philo[0].mutex_ate_times = 0;
 	philo[0].mutex_die = 0;
-	// philo[0].mutex_start = 0;
 	philo[0].mutex_time_to_die = 0;
 	return (0);
 }
@@ -75,22 +68,17 @@ static void	ft_mutex_handle(t_philo *philo)
 
 	i = 0;
 	pthread_mutex_init(philo[0].mutex_print, NULL);
+	pthread_mutex_init(&(philo[0].mutex_ate_times[0].mutex), NULL);
 	while (++i <= philo[0].sum)
 	{
 		philo[i].mutex_print = philo[0].mutex_print;
+		philo[i].mutex_ate_times = philo[0].mutex_ate_times;
 		pthread_mutex_init(&philo[0].psfork[i].mutex, NULL);
 		philo[0].psfork[i].nbr = i;
-		philo[0].psfork[i].used = 2;
 		philo[i].psfork = philo[0].psfork;
-		pthread_mutex_init(&philo[0].mutex_ate_times[i].mutex, NULL);
-		philo[0].mutex_ate_times[i].nbr = i;
-		philo[i].mutex_ate_times = &philo[0].mutex_ate_times[i];
 		pthread_mutex_init(&philo[0].mutex_die[i].mutex, NULL);
 		philo[0].mutex_die[i].nbr = i;
 		philo[i].mutex_die = &philo[0].mutex_die[i];
-		// pthread_mutex_init(&philo[0].mutex_start[i].mutex, NULL);
-		// philo[0].mutex_start[i].nbr = i;
-		// philo[i].mutex_start = &philo[0].mutex_start[i];
 		pthread_mutex_init(&philo[0].mutex_time_to_die[i].mutex, NULL);
 		philo[0].mutex_time_to_die[i].nbr = i;
 		philo[i].mutex_time_to_die = &philo[0].mutex_time_to_die[i];

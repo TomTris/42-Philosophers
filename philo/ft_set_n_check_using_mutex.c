@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_set_n_check_using_mutex_1.c                     :+:      :+:    :+:   */
+/*   ft_set_n_check_using_mutex.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:10:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 16:45:05 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 18:12:54 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,21 @@ struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 			pthread_mutex_unlock(philo_i[0].mutex_print);
 	}
 	return (begin);
+}
+
+int	ft_check_ate_times(t_philo *philo_i)
+{
+	int	ret;
+
+	pthread_mutex_lock(&philo_i[0].mutex_ate_times[0].mutex);
+	ret = philo_i[0].mutex_ate_times[0].nbr;
+	pthread_mutex_unlock(&philo_i[0].mutex_ate_times[0].mutex);
+	return (ret);
+}
+
+void	ft_set_ate_times(t_philo *philo_i)
+{
+	pthread_mutex_lock(&philo_i[0].mutex_ate_times[0].mutex);
+	++(philo_i[0].mutex_ate_times[0].nbr);
+	pthread_mutex_unlock(&philo_i[0].mutex_ate_times[0].mutex);
 }

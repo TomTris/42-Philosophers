@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:03:28 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 16:58:22 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 17:20:51 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ t_philo	*ft_philo_fill(int ac, char **av)
 	philo[0].time_sleep = ft_char_to_nbr(av[4]);
 	philo[0].must_eat = ft_char_to_nbr(av[5]);
 	if (philo[0].time_die < 0 || philo[0].time_eat < 0
-		|| philo[0].time_sleep < 0 || philo[0].must_eat == -2)
+		|| philo[0].time_sleep < 0 || philo[0].must_eat == -2
+		|| philo[0].must_eat == 0)
 		return (free(philo), ft_usage(), NULL);
 	if (ft_philo_set(philo) == 0)
 		return (free(philo), NULL);
