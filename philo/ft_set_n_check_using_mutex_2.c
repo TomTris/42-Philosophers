@@ -6,31 +6,11 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:55 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 23:32:12 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 16:44:26 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philolib.h"
-
-// void	ft_set_start_time(t_philo *philo_i)
-// {
-// 	pthread_mutex_lock(&philo_i[0].mutex_start[0].mutex);
-// 	gettimeofday(&philo_i[0].start, NULL);
-// 	pthread_mutex_unlock(&philo_i[0].mutex_start[0].mutex);
-// }
-
-// double	ft_cnt_time_of_acti(t_philo *philo_i)
-// {
-// 	struct timeval	now;
-// 	double			time;
-
-// 	pthread_mutex_lock(&philo_i[0].mutex_start[0].mutex);
-// 	gettimeofday(&now, NULL);
-// 	time = ((now.tv_usec - philo_i[0].start.tv_usec) / 1000)
-// 		+ ((now.tv_sec - philo_i[0].start.tv_sec) * 1000);
-// 	pthread_mutex_unlock(&philo_i[0].mutex_start[0].mutex);
-// 	return (time);
-// }
 
 int	ft_check_ate_times(t_philo *philo_i)
 {

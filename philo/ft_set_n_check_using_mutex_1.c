@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:10:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/28 23:50:29 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 16:37:23 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,6 @@ void	ft_set_time_to_die(t_philo *philo_i)
 		gettimeofday(&philo_i[0].time_to_die, NULL);
 	pthread_mutex_unlock(&philo_i[0].mutex_die[0].mutex);
 	pthread_mutex_unlock(&philo_i[0].mutex_time_to_die[0].mutex);
-}
-
-double	ft_cnt_time_to_die(t_philo *philo_i)
-{
-	struct timeval	now;
-
-	gettimeofday(&now, NULL);
-	return (((now.tv_usec - philo_i[0].time_to_die.tv_usec) / 1000)
-		+ ((now.tv_sec - philo_i[0].time_to_die.tv_sec) * 1000));
 }
 
 int	ft_check_die_philo(t_philo *philo_i)
