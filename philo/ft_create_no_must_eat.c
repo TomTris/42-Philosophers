@@ -6,13 +6,13 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:27 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 20:52:56 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 21:44:12 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philolib.h"
 
-static void	ft_philo_job_alone(void *param)
+static int	ft_philo_job_alone(void *param)
 {
 	t_philo				*philo_1;
 	long int			time_cnt;
@@ -21,7 +21,8 @@ static void	ft_philo_job_alone(void *param)
 	philo_1 = (t_philo *)param;
 	gettimeofday(&philo_1[0].start, NULL);
 	pthread_mutex_lock(&philo_1[0].psfork[1].mutex);
-	printf("0 1 took a fork\n");
+	if (printf("0 1 took a fork\n") == -1)
+		return (write(2, "printf error\n", 13), 0);
 	while (1)
 	{
 		gettimeofday(&now, NULL);
@@ -29,11 +30,13 @@ static void	ft_philo_job_alone(void *param)
 			+ (now.tv_sec - philo_1[0].start.tv_sec) * 1000;
 		if (time_cnt >= philo_1[0].time_die)
 		{
-			printf("%ld 1 die\n", time_cnt);
+			if (printf("%ld 1 die\n", time_cnt) == -1)
+				return (write(2, "printf error\n", 13), 0);
 			pthread_mutex_unlock(&philo_1[0].psfork[1].mutex);
 			break ;
 		}
 	}
+	return (1);
 }
 
 static size_t	ft_cnt_time_to_die(t_philo *philo_i)
@@ -53,8 +56,9 @@ static void	ft_print_n_set_die_super(t_philo *philo, int i_die)
 
 	begin = ft_print_out(NULL, NULL);
 	gettimeofday(&now, NULL);
-	printf("%ld %d die\n", ((now.tv_sec - begin->tv_sec) * 1000)
-		+ ((now.tv_usec - begin->tv_usec) / 1000), i_die);
+	if (i_die > 0)
+		printf("%ld %d die\n", ((now.tv_sec - begin->tv_sec) * 1000)
+			+ ((now.tv_usec - begin->tv_usec) / 1000), i_die);
 	i = 0;
 	while (++i <= philo[0].sum)
 		pthread_mutex_lock(&philo[i].mutex_die[0].mutex);
@@ -67,6 +71,8 @@ static void	ft_print_n_set_die_super(t_philo *philo, int i_die)
 	pthread_mutex_unlock(philo[0].mutex_print);
 }
 
+//if (mutex_time_to_die == -1) => that philo set itself
+//to report error of print func.
 static void	ft_check_die_super(t_philo *philo)
 {
 	int		i;
@@ -77,10 +83,14 @@ static void	ft_check_die_super(t_philo *philo)
 	{
 		pthread_mutex_lock(&(philo[0].mutex_time_to_die[i].mutex));
 		time = ft_cnt_time_to_die(&(philo[i]));
-		if (time > (size_t) philo[0].time_die)
+		if (philo[0].mutex_time_to_die[i].nbr == -1
+			|| time > (size_t) philo[0].time_die)
 		{
 			pthread_mutex_lock(philo[0].mutex_print);
-			ft_print_n_set_die_super(philo, i);
+			if (philo[0].mutex_time_to_die[i].nbr == -1)
+				ft_print_n_set_die_super(philo, -1);
+			else
+				ft_print_n_set_die_super(philo, i);
 			pthread_mutex_unlock(&(philo[0].mutex_time_to_die[i].mutex));
 			break ;
 		}
