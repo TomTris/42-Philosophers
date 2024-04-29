@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:27 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 16:44:00 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 16:58:39 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,6 @@ static void	ft_philo_job_alone(void *param)
 	}
 }
 
-static void	ft_check_die_super(t_philo *philo)
-{
-	int		i;
-	size_t	time;
-
-	i = 0;
-	while (++i <= philo[0].sum)
-	{
-		pthread_mutex_lock(&(philo[0].mutex_time_to_die[i].mutex));
-		time = ft_cnt_time_to_die(&(philo[i]));
-		if (time > (size_t) philo[0].time_die)
-		{
-			pthread_mutex_lock(philo[0].mutex_print);
-			ft_print_n_set_die_super(philo, i);
-			pthread_mutex_unlock(&(philo[0].mutex_time_to_die[i].mutex));
-			break ;
-		}
-		pthread_mutex_unlock((&philo[0].mutex_time_to_die[i].mutex));
-		if (i == philo[0].sum)
-			i = 0;
-	}
-}
 
 size_t	ft_cnt_time_to_die(t_philo *philo_i)
 {
@@ -90,6 +68,29 @@ static void	ft_print_n_set_die_super(t_philo *philo, int i_die)
 		pthread_mutex_unlock(&philo[i].mutex_die[0].mutex);
 	}
 	pthread_mutex_unlock(philo[0].mutex_print);
+}
+
+static void	ft_check_die_super(t_philo *philo)
+{
+	int		i;
+	size_t	time;
+
+	i = 0;
+	while (++i <= philo[0].sum)
+	{
+		pthread_mutex_lock(&(philo[0].mutex_time_to_die[i].mutex));
+		time = ft_cnt_time_to_die(&(philo[i]));
+		if (time > (size_t) philo[0].time_die)
+		{
+			pthread_mutex_lock(philo[0].mutex_print);
+			ft_print_n_set_die_super(philo, i);
+			pthread_mutex_unlock(&(philo[0].mutex_time_to_die[i].mutex));
+			break ;
+		}
+		pthread_mutex_unlock((&philo[0].mutex_time_to_die[i].mutex));
+		if (i == philo[0].sum)
+			i = 0;
+	}
 }
 
 int	ft_philo_create(t_philo *philo, pthread_t *philo_id)
