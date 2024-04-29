@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:27 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 00:26:05 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 14:45:26 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,19 +83,6 @@ static void	ft_check_die_super(t_philo *philo)
 	}
 }
 
-static void	ft_philo_job(void *philo_data)
-{
-	t_philo			*philo_i;
-
-	philo_i = (t_philo *)philo_data;
-	if (philo_i[0].group_sum == 2)
-	{
-		ft_philojob_groupsum2(philo_i);
-	}
-	else
-		ft_philojob_groupsum3(philo_i);
-}
-
 
 int	ft_philo_create(t_philo *philo, pthread_t *philo_id)
 {
@@ -115,7 +102,7 @@ int	ft_philo_create(t_philo *philo, pthread_t *philo_id)
 	while (++i <= philo[0].sum)
 	{
 		philo[i].time_to_die = *begin;
-		pthread_create(&(philo_id[i]), NULL, (void *)&ft_philo_job,
+		pthread_create(&(philo_id[i]), NULL, (void *)&ft_philojob,
 			(void *)&(philo[i]));
 	}
 	ft_check_die_super(philo);
