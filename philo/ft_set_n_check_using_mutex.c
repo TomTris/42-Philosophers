@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:10:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 20:49:33 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 21:41:35 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ int	ft_check_die_philo(t_philo *philo_i)
 	return (ret);
 }
 
+
+//ft_error(philo_i, 0) will set mutex_time_to_die = -1
+// => supervisor find out -> programm stop.
 struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 {
 	static struct timeval	*begin = NULL;
@@ -47,7 +50,6 @@ struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 		if (begin == 0)
 			return (NULL);
 		gettimeofday(begin, NULL);
-		return (begin);
 	}
 	else if (philo_i != 0 && str != 0)
 	{
@@ -55,9 +57,10 @@ struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 			pthread_mutex_lock(philo_i[0].mutex_print);
 		gettimeofday(&now, NULL);
 		if (ft_check_die_philo(philo_i) == 0)
-			printf("%ld %d %s\n", (((now.tv_sec - begin->tv_sec) * 1000)
-					+ ((now.tv_usec - begin->tv_usec) / 1000)),
-				philo_i[0].nbr, str);
+			if ((printf("%ld %d %s\n", (((now.tv_sec - begin->tv_sec) * 1000)
+							+ ((now.tv_usec - begin->tv_usec) / 1000)),
+						philo_i[0].nbr, str)) == -1)
+				ft_error_report(philo_i);
 		if (philo_i[0].nbr != 0)
 			pthread_mutex_unlock(philo_i[0].mutex_print);
 	}

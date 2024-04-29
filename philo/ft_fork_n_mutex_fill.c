@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 21:07:21 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 17:55:35 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 21:17:04 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ static int	ft_del(t_philo *philo)
 	return (0);
 }
 
-//handle philo[0].psfork[i].used = 2; later
+//mutex_time_to_die is used for checking error.
+//for ex, printf = -1. supervisor check it
 static void	ft_mutex_handle(t_philo *philo)
 {
 	int	i;
@@ -80,7 +81,7 @@ static void	ft_mutex_handle(t_philo *philo)
 		philo[0].mutex_die[i].nbr = i;
 		philo[i].mutex_die = &philo[0].mutex_die[i];
 		pthread_mutex_init(&philo[0].mutex_time_to_die[i].mutex, NULL);
-		philo[0].mutex_time_to_die[i].nbr = i;
+		// philo[0].mutex_time_to_die[i].nbr = i;
 		philo[i].mutex_time_to_die = &philo[0].mutex_time_to_die[i];
 	}
 }

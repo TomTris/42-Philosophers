@@ -6,11 +6,17 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:38:35 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 17:58:30 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 21:40:37 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philolib.h"
+
+void	ft_error_report(t_philo *philo)
+{
+	philo[0].mutex_time_to_die[0].nbr = -1;
+	write(2, "printf func error\n", 18);
+}
 
 static void	ft_destroy_n_free(t_philo *philo)
 {
