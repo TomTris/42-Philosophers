@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:55 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 18:54:07 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 20:43:12 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,6 @@ static void	ft_print_n_set_die_super(t_philo *philo, int i_die, int check)
 	if (check == 1)
 		printf("%ld %d die\n", ((now.tv_sec - begin->tv_sec) * 1000)
 			+ ((now.tv_usec - begin->tv_usec) / 1000), i_die);
-	else
-		printf("enough %d times at least for all philosophers\n",
-			philo[0].must_eat);
 	i = 0;
 	while (++i <= philo[0].sum)
 		pthread_mutex_lock(&philo[i].mutex_die[0].mutex);

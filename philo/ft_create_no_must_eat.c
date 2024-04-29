@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:27 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 17:22:33 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/29 20:52:56 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,11 @@ static void	ft_philo_job_alone(void *param)
 	gettimeofday(&philo_1[0].start, NULL);
 	pthread_mutex_lock(&philo_1[0].psfork[1].mutex);
 	printf("0 1 took a fork\n");
-	printf("--%d \n", philo_1[0].time_die);
 	while (1)
 	{
 		gettimeofday(&now, NULL);
 		time_cnt = (now.tv_usec - philo_1[0].start.tv_usec) / 1000
 			+ (now.tv_sec - philo_1[0].start.tv_sec) * 1000;
-		printf("%ld\n", time_cnt);
 		if (time_cnt >= philo_1[0].time_die)
 		{
 			printf("%ld 1 die\n", time_cnt);
@@ -37,7 +35,6 @@ static void	ft_philo_job_alone(void *param)
 		}
 	}
 }
-
 
 static size_t	ft_cnt_time_to_die(t_philo *philo_i)
 {
