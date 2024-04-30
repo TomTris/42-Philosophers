@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:10:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/30 01:17:20 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 22:54:38 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	ft_check_die_philo(t_philo *philo_i)
 	ret = 0;
 	pthread_mutex_lock(&philo_i[0].mutex_time_to_die[0].mutex);
 	pthread_mutex_lock(&philo_i[0].mutex_die[0].mutex);
-	if (philo_i[0].die == 1)
+	if (philo_i[0].die == 1 || ft_cnt_time_to_die(philo_i)
+		>= (size_t) philo_i[0].time_die)
 		ret = 1;
 	pthread_mutex_unlock(&philo_i[0].mutex_die[0].mutex);
 	pthread_mutex_unlock(&philo_i[0].mutex_time_to_die[0].mutex);

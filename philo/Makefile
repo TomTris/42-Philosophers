@@ -1,9 +1,8 @@
 NAME = philo
 CFLAGS = -Wall -Werror -Wextra
 SRC = 	ft_fork_n_mutex_fill.c ft_philo_fill.c philo.c\
-		ft_set_n_check_using_mutex.c\
-		ft_create_no_must_eat.c ft_philojob_no_must_eat.c\
-		ft_create_with_must_eat.c ft_philojob_with_must_eat.c
+		ft_set_n_check_using_mutex.c ft_supervisor.c\
+		ft_create.c ft_philojob.c
 OBJS = $(SRC:.c=.o)
 
 all: $(NAME)
