@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 21:07:21 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/30 20:07:09 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 23:26:21 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 static int	ft_malloc_mutex(t_philo *philo)
 {
 	philo[0].mutex_print = (pthread_mutex_t *)malloc
-		(2 * sizeof(pthread_mutex_t));
+		(1 * sizeof(pthread_mutex_t));
 	if (philo[0].mutex_print == 0)
 		return (0);
 	philo[0].mutex_ate_times = (t_list_mutex *)malloc
-		(2 * sizeof(t_list_mutex));
+		(1 * sizeof(t_list_mutex));
 	if (philo[0].mutex_ate_times == 0)
 		return (0);
 	philo[0].psfork = (t_list_mutex *)malloc
@@ -80,11 +80,6 @@ static int	ft_mutex_handle(t_philo *philo, int i)
 		philo[0].mutex_time_to_die[i].nbr = i;
 		philo[i].mutex_time_to_die = &philo[0].mutex_time_to_die[i];
 	}
-	philo[0].psfork[1].used = philo[0].group_sum;
-	i = 1;
-	while (++i < philo[0].sum)
-		philo[0].psfork[i].used = 2;
-	philo[0].psfork[i].used = philo[0].group_sum;
 	return (1);
 }
 
@@ -103,12 +98,14 @@ static int	ft_destroy_becauseof_fail(t_philo *philo)
 			pthread_mutex_destroy(&(philo[0].mutex_time_to_die[i].mutex));
 	}
 	pthread_mutex_destroy(philo[0].mutex_print);
-	pthread_mutex_destroy(&(philo[0].mutex_ate_times[i].mutex));
+	pthread_mutex_destroy(&(philo[0].mutex_ate_times[0].mutex));
 	return (ft_del(philo));
 }
 
 int	ft_fork_n_mutex_fill(t_philo *philo)
 {
+	int	i;
+
 	philo[0].mutex_print = 0;
 	philo[0].mutex_ate_times = 0;
 	philo[0].psfork = 0;
@@ -123,5 +120,10 @@ int	ft_fork_n_mutex_fill(t_philo *philo)
 	philo[0].mutex_ate_times[0].nbr = 0;
 	if (ft_mutex_handle(philo, 0) == 0)
 		return (ft_destroy_becauseof_fail(philo));
+	philo[0].psfork[1].used = philo[0].group_sum;
+	i = 1;
+	while (++i < philo[0].sum)
+		philo[0].psfork[i].used = 2;
+	philo[0].psfork[i].used = philo[0].group_sum;
 	return (1);
 }

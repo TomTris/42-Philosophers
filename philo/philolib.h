@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:41:57 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/30 22:54:56 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 23:16:58 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,28 @@
 typedef struct s_list_mutex
 {
 	short			nbr;
-	short			used;
+	char			used;
 	pthread_mutex_t	mutex;
 }	t_list_mutex;
 
 typedef struct s_philo
 {
 	t_list_mutex		*psfork;
-	short				die;
+	char				die;
 	t_list_mutex		*mutex_die;
-	int					nbr;
-	int					sum;
-	int					group;
-	int					group_sum;
-	int					ate_times;
+	short				nbr;
+	short				sum;
+	char				group;
+	char				group_sum;
+	short				ate_times;
 	t_list_mutex		*mutex_ate_times;
 	struct timeval		time_to_die;
 	t_list_mutex		*mutex_time_to_die;
 	struct timeval		start;
-	int					time_die;
-	int					time_eat;
-	int					time_sleep;
-	int					must_eat;
+	short				time_die;
+	short				time_eat;
+	short				time_sleep;
+	short				must_eat;
 	pthread_mutex_t		*mutex_print;
 	pthread_t			*philo_id;
 }	t_philo;
@@ -62,7 +62,6 @@ int				ft_check_ate_times(t_philo *philo_i);
 void			ft_set_ate_times(t_philo *philo_i);
 struct timeval	*ft_print_out(t_philo *philo_i, char *str);
 size_t			ft_cnt_time_to_die(t_philo *philo_i);
-void			ft_print_n_set_die_super(t_philo *philo, int i_die);
 void			ft_check_die_super(t_philo *philo, int i, size_t time);
 
 #endif
