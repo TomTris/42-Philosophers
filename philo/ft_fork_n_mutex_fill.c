@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 21:07:21 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/30 01:56:57 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 20:07:09 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,11 @@ static int	ft_mutex_handle(t_philo *philo, int i)
 		philo[0].mutex_time_to_die[i].nbr = i;
 		philo[i].mutex_time_to_die = &philo[0].mutex_time_to_die[i];
 	}
+	philo[0].psfork[1].used = philo[0].group_sum;
+	i = 1;
+	while (++i < philo[0].sum)
+		philo[0].psfork[i].used = 2;
+	philo[0].psfork[i].used = philo[0].group_sum;
 	return (1);
 }
 
