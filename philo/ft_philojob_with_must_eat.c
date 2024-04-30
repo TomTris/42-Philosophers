@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 17:15:58 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 21:42:20 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 01:18:59 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,12 @@ void	ft_philojob_with_must_eat(void *philo_data)
 		fork_right = 1;
 	if (philo_i[0].group == 2)
 	{
-		usleep(philo_i[0].time_eat * 500);
+		usleep(philo_i[0].time_eat * 20);
 		ft_group23(philo_i, philo_i[0].nbr, fork_right);
 	}
 	else
 	{
-		usleep(philo_i[0].time_eat * 1500);
-		ft_group23(philo_i, philo_i[0].nbr, fork_right);	
+		usleep(philo_i[0].time_eat * 1030);
+		ft_group23(philo_i, philo_i[0].nbr, fork_right);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:10:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 21:41:35 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 01:17:20 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,8 @@ int	ft_check_die_philo(t_philo *philo_i)
 	return (ret);
 }
 
-
-//ft_error(philo_i, 0) will set mutex_time_to_die = -1
-// => supervisor find out -> programm stop.
+//ft_error(philo_i, 0) will set psfork[0].nbr = -1
+// => supervisor always check psfork[0].nbr find out -> programm stop.
 struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 {
 	static struct timeval	*begin = NULL;

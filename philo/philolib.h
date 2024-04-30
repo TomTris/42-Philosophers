@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:41:57 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 21:40:54 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 02:06:11 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_philo
 	pthread_t			*philo_id;
 }	t_philo;
 
+void			ft_error_report(t_philo *philo);
 int				ft_fork_n_mutex_fill(t_philo *philo);
 t_philo			*ft_philo_fill(int ac, char **av);
 
@@ -63,6 +64,5 @@ int				ft_check_die_philo(t_philo *philo_i);
 int				ft_check_ate_times(t_philo *philo_i);
 void			ft_set_ate_times(t_philo *philo_i);
 struct timeval	*ft_print_out(t_philo *philo_i, char *str);
-void			ft_error_report(t_philo *philo);
 
 #endif
