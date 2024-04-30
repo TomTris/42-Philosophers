@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:55 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 21:45:11 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 02:09:53 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static size_t	ft_cnt_time_to_die(t_philo *philo_i)
 		+ ((now.tv_sec - philo_i[0].time_to_die.tv_sec) * 1000));
 }
 
-static void	ft_print_n_set_die_super(t_philo *philo, int i_die, int check)
+static void	ft_print_n_set_die_super(t_philo *philo, int i_die)
 {
 	int				i;
 	struct timeval	*begin;
@@ -56,7 +56,7 @@ static void	ft_print_n_set_die_super(t_philo *philo, int i_die, int check)
 
 	begin = ft_print_out(NULL, NULL);
 	gettimeofday(&now, NULL);
-	if (check == 1)
+	if (i_die > 0)
 		printf("%ld %d die\n", ((now.tv_sec - begin->tv_sec) * 1000)
 			+ ((now.tv_usec - begin->tv_usec) / 1000), i_die);
 	i = 0;
@@ -68,35 +68,33 @@ static void	ft_print_n_set_die_super(t_philo *philo, int i_die, int check)
 		philo[i].die = 1;
 		pthread_mutex_unlock(&philo[i].mutex_die[0].mutex);
 	}
-	if (check == 1)
-		pthread_mutex_unlock(&(philo[0].mutex_time_to_die[i].mutex));
-	else
-		pthread_mutex_unlock(&(philo[0].mutex_ate_times[0].mutex));
 	pthread_mutex_unlock(philo[0].mutex_print);
 }
 
+//if (mutex_time_to_die == -1) => that philo set itself
+//to report error of print func.
 static void	ft_check_die_super(t_philo *philo, int i, size_t time)
 {
 	while (++i <= philo[0].sum)
 	{
 		pthread_mutex_lock(&(philo[0].mutex_time_to_die[i].mutex));
 		time = ft_cnt_time_to_die(&(philo[i]));
-		if (philo[0].mutex_time_to_die[i].nbr == -1
-			|| time > (size_t) philo[0].time_die)
+		if (time > (size_t) philo[0].time_die)
 		{
 			pthread_mutex_lock(philo[0].mutex_print);
-			if (philo[0].mutex_time_to_die[i].nbr == -1)
-				ft_print_n_set_die_super(philo, i, 0);
-			else
-				ft_print_n_set_die_super(philo, i, 1);
+			ft_print_n_set_die_super(philo, i);
+			pthread_mutex_unlock((&philo[0].mutex_time_to_die[i].mutex));
 			break ;
 		}
 		pthread_mutex_unlock((&philo[0].mutex_time_to_die[i].mutex));
 		pthread_mutex_lock(&(philo[0].mutex_ate_times[0].mutex));
-		if (philo[0].mutex_ate_times[0].nbr == philo[0].sum)
+		if (philo[0].mutex_ate_times[0].nbr == philo[0].sum
+			|| philo[0].mutex_ate_times[0].nbr < 0)
 		{
 			pthread_mutex_lock(philo[0].mutex_print);
-			return (ft_print_n_set_die_super(philo, i, 0));
+			ft_print_n_set_die_super(philo, -1);
+			pthread_mutex_unlock(&(philo[0].mutex_ate_times[0].mutex));
+			break ;
 		}
 		pthread_mutex_unlock(&(philo[0].mutex_ate_times[0].mutex));
 		if (i == philo[0].sum)

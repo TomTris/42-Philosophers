@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 22:36:27 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/29 21:44:12 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 01:57:09 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,28 +73,30 @@ static void	ft_print_n_set_die_super(t_philo *philo, int i_die)
 
 //if (mutex_time_to_die == -1) => that philo set itself
 //to report error of print func.
-static void	ft_check_die_super(t_philo *philo)
+static void	ft_check_die_super(t_philo *philo, int i, size_t time)
 {
-	int		i;
-	size_t	time;
-
-	i = 0;
 	while (++i <= philo[0].sum)
 	{
 		pthread_mutex_lock(&(philo[0].mutex_time_to_die[i].mutex));
 		time = ft_cnt_time_to_die(&(philo[i]));
-		if (philo[0].mutex_time_to_die[i].nbr == -1
-			|| time > (size_t) philo[0].time_die)
+		if (time > (size_t) philo[0].time_die)
 		{
 			pthread_mutex_lock(philo[0].mutex_print);
-			if (philo[0].mutex_time_to_die[i].nbr == -1)
-				ft_print_n_set_die_super(philo, -1);
-			else
-				ft_print_n_set_die_super(philo, i);
-			pthread_mutex_unlock(&(philo[0].mutex_time_to_die[i].mutex));
+			ft_print_n_set_die_super(philo, i);
+			pthread_mutex_unlock((&philo[0].mutex_time_to_die[i].mutex));
 			break ;
 		}
 		pthread_mutex_unlock((&philo[0].mutex_time_to_die[i].mutex));
+		pthread_mutex_lock(&(philo[0].mutex_ate_times[0].mutex));
+		if (philo[0].mutex_ate_times[0].nbr == philo[0].sum
+			|| philo[0].mutex_ate_times[0].nbr < 0)
+		{
+			pthread_mutex_lock(philo[0].mutex_print);
+			ft_print_n_set_die_super(philo, -1);
+			pthread_mutex_unlock(&(philo[0].mutex_ate_times[0].mutex));
+			break ;
+		}
+		pthread_mutex_unlock(&(philo[0].mutex_ate_times[0].mutex));
 		if (i == philo[0].sum)
 			i = 0;
 	}
@@ -121,7 +123,7 @@ int	ft_philo_create_no_must_eat(t_philo *philo, pthread_t *philo_id)
 		pthread_create(&(philo_id[i]), NULL, (void *)&ft_philojob_no_must_eat,
 			(void *)&(philo[i]));
 	}
-	ft_check_die_super(philo);
+	ft_check_die_super(philo, 0, 0);
 	i = 0;
 	while (++i <= philo[0].sum)
 		pthread_join(philo_id[i], NULL);
