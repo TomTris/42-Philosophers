@@ -1,18 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_additional.c                                    :+:      :+:    :+:   */
+/*   ft_supervisor.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 22:36:27 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/30 22:44:39 by qdo              ###   ########.fr       */
+/*   Updated: 2024/04/30 23:01:39 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philolib.h"
 
-void	ft_print_n_set_die_super(t_philo *philo, int i_die)
+size_t	ft_cnt_time_to_die(t_philo *philo_i)
+{
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	return (((now.tv_usec - philo_i[0].time_to_die.tv_usec) / 1000)
+		+ ((now.tv_sec - philo_i[0].time_to_die.tv_sec) * 1000));
+}
+
+static void	ft_print_n_set_die_super(t_philo *philo, int i_die)
 {
 	int				i;
 	struct timeval	*begin;
@@ -64,13 +73,4 @@ void	ft_check_die_super(t_philo *philo, int i, size_t time)
 		if (i == philo[0].sum)
 			i = 0;
 	}
-}
-
-size_t	ft_cnt_time_to_die(t_philo *philo_i)
-{
-	struct timeval	now;
-
-	gettimeofday(&now, NULL);
-	return (((now.tv_usec - philo_i[0].time_to_die.tv_usec) / 1000)
-		+ ((now.tv_sec - philo_i[0].time_to_die.tv_sec) * 1000));
 }
