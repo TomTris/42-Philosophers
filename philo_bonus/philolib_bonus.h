@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 23:31:13 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/01 02:47:32 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 00:39:16 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <semaphore.h>
+# include <signal.h>
+# include <sys/wait.h>
+# include <fcntl.h>
 
 //sem_print - only 1
 //sem_ate_times - asmanyas philos- there will be a thread of main processes
@@ -27,24 +30,38 @@
 //sem_fork - forks-number
 typedef struct s_sm_philo
 {
-	short		du_die;
+	int			du_die;
 	short		du_eat;
 	short		du_sleep;
 	short		sum;
 	short		nbr;
-	char		group;
-	char		group_sum;
-	char		die;
 	short		must_eat;
 	short		ate_times;
+	pthread_t	super_thread;
 	pid_t		*philos;
 	size_t		time_to_die;
 	sem_t		*sem_fork;
 	sem_t		*sem_ate_times;
 	sem_t		*sem_print;
+	sem_t		*sem_super_prio;
+	sem_t		*sem_fork_pair;
 }	t_sm_philo;
 
-t_sm_philo	*ft_sm_philo_fill(int ac, char **av, t_sm_philo *philo);
+//ft_philo_fill.c
+int			ft_sm_philo_fill(int ac, char **av, t_sm_philo *philo);
+
+//philo_bonus.c
 void		ft_clean_programm(t_sm_philo *philo, char check);
+
+//ft_time_funcs.c
+size_t		ft_begin(int check);
+size_t		ft_current_time(void);
+
+//ft_create_bonus.c
+void		ft_create_bonus(t_sm_philo *philo);
+
+//ft_ms_phlojob.c
+
+void		ft_sm_philojob(void *philo_data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 01:30:34 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/01 02:46:58 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 00:52:39 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,57 @@
 
 void	ft_clean_programm(t_sm_philo *philo, char check)
 {
-	close(philo->sem_fork);
-	unlink("/sem_fork");
-	close(philo->sem_print);
-	unlink("/sem_print");
-	close(philo->sem_print);
-	unlink("/sem_print");
-	close(philo->sem_ate_times);
+	sem_close(philo->sem_ate_times);
 	unlink("/sem_ate_times");
+	if (philo->sem_fork != 0 && philo->sem_fork != SEM_FAILED)
+	{
+		sem_close(philo->sem_fork);
+		unlink("/sem_fork");
+	}
+	if (philo->sem_print != 0 && philo->sem_print != SEM_FAILED)
+	{
+		sem_close(philo->sem_print);
+		unlink("/sem_print");
+	}
+	if (philo->sem_super_prio != 0 && philo->sem_super_prio != SEM_FAILED)
+	{
+		sem_close(philo->sem_super_prio);
+		unlink("/sem_super_prio");
+	}
+	if (philo->sem_fork_pair != 0 && philo->sem_fork_pair != SEM_FAILED)
+	{
+		sem_close(philo->sem_fork_pair);
+		unlink("/sem_fork_pair");
+	}
+	if (philo->philos != 0)
+		free(philo->philos);
 	exit(check);
 }
 
 static int	ft_set_sem(t_sm_philo *philo)
 {
-	sem_unlink("sem_ate_times");
-	sem_unlink("sem_fork");
-	sem_unlink("sem_print");
+	sem_unlink("/sem_ate_times");
 	philo->sem_ate_times = sem_open("/sem_ate_times",
-			O_CREAT, 0644, philo->sum);
+			O_CREAT, 0666, 0);
 	if (philo->sem_ate_times == SEM_FAILED)
 		return (0);
-	philo->sem_fork = sem_open("/sem_fork", O_CREAT, 0644, philo->sum);
+	sem_unlink("/sem_fork");
+	philo->sem_fork = sem_open("/sem_fork", O_CREAT, 0666, philo->sum);
 	if (philo->sem_fork == SEM_FAILED)
-		return (close(philo->sem_ate_times), unlink("/sem_ate_times"), 0);
-	philo->sem_print = sem_open("/sem_print", O_CREAT, 0644, 1);
+		return (ft_clean_programm(philo, EXIT_FAILURE), -99);
+	sem_unlink("/sem_print");
+	philo->sem_print = sem_open("/sem_print", O_CREAT, 0666, 1);
 	if (philo->sem_print == SEM_FAILED)
-		return (close(philo->sem_fork), unlink("/sem_fork"),
-			close(philo->sem_ate_times), unlink("/sem_ate_times"), 0);
+		return (ft_clean_programm(philo, EXIT_FAILURE), -99);
+	sem_unlink("/sem_super_prio");
+	philo->sem_super_prio = sem_open("/sem_super_prio", O_CREAT, 0666, 1);
+	if (philo->sem_super_prio == SEM_FAILED)
+		return (ft_clean_programm(philo, EXIT_FAILURE), -99);
+	sem_unlink("/sem_fork_pair");
+	philo->sem_fork_pair = sem_open("/sem_fork_pair", O_CREAT,
+			0666, philo->sum / 2);
+	if (philo->sem_fork_pair == SEM_FAILED)
+		return (ft_clean_programm(philo, EXIT_FAILURE), -99);
 	return (1);
 }
 
@@ -48,13 +72,9 @@ int	main(int ac, char **av)
 {
 	t_sm_philo	philo;
 
-	if (ft_sm_philo_fill(ac, av, &philo) == 0)
-		return (1);
-	if (philo.must_eat == 0)
-		return (0);
+	philo.philos = 0;
+	ft_sm_philo_fill(ac, av, &philo);
 	if (ft_set_sem(&philo) == 0)
 		return (1);
-	if (ft_create_bonus(&philo) == 0)
-		return (ft_clean_programm(&philo, EXIT_FAILURE), -99);
-	return (ft_clean_programm(&philo, EXIT_SUCCESS), -99);
+	ft_create_bonus(&philo);
 }
