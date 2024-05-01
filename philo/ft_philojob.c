@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 17:15:58 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/30 23:13:34 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/01 17:12:09 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ static void	ft_usleep(t_philo *philo_i, size_t dura)
 	size_t			dif_us;
 
 	gettimeofday(&start_tv, NULL);
-	dura *= 100;
-	start_us = (start_tv.tv_sec * 100000) + (start_tv.tv_usec / 10);
+	dura *= 1000;
+	start_us = (start_tv.tv_sec * 1000000) + (start_tv.tv_usec);
 	while (1)
 	{
 		if (ft_check_die_philo(philo_i) == 1)
 			return ;
 		gettimeofday(&now_tv, NULL);
-		dif_us = (now_tv.tv_sec * 100000) + (now_tv.tv_usec / 10) - (start_us);
+		dif_us = (now_tv.tv_sec * 1000000) + (now_tv.tv_usec) - (start_us);
 		if (dif_us < dura)
 			usleep(250);
 		else
@@ -64,11 +64,11 @@ static void	ft_group_even(t_philo *philo_i, int fork_left, int fork_right)
 	ft_take_fork(philo_i, fork_left, fork_right);
 	ft_print_out(philo_i, "has taken a fork");
 	ft_print_out(philo_i, "has taken a fork");
+	ft_set_time_to_die(philo_i);
 	ft_print_out(philo_i, "is eating");
 	ft_usleep(philo_i, philo_i[0].time_eat);
 	philo_i[0].psfork[fork_left].used = philo_i[0].group;
 	pthread_mutex_unlock(&philo_i[0].psfork[fork_left].mutex);
-	ft_set_time_to_die(philo_i);
 	philo_i[0].psfork[fork_right].used = philo_i[0].group;
 	pthread_mutex_unlock(&philo_i[0].psfork[fork_right].mutex);
 	if (++(philo_i[0].ate_times) == philo_i[0].must_eat)
@@ -85,11 +85,11 @@ static void	ft_group_odd(t_philo *philo_i, short fork_left, short fork_right)
 	ft_take_fork(philo_i, fork_left, fork_right);
 	ft_print_out(philo_i, "has taken a fork");
 	ft_print_out(philo_i, "has taken a fork");
+	ft_set_time_to_die(philo_i);
 	ft_print_out(philo_i, "is eating");
 	ft_usleep(philo_i, philo_i[0].time_eat);
 	philo_i[0].psfork[fork_left].used = philo_i[0].group;
 	pthread_mutex_unlock(&philo_i[0].psfork[fork_left].mutex);
-	ft_set_time_to_die(philo_i);
 	philo_i[0].psfork[fork_right].used = philo_i[0].group;
 	pthread_mutex_unlock(&philo_i[0].psfork[fork_right].mutex);
 	if (++(philo_i[0].ate_times) == philo_i[0].must_eat)
