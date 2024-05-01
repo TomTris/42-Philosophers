@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 01:41:33 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/01 02:10:06 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 00:54:16 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,61 +39,32 @@ static int	ft_char_to_nbr(char *str)
 	return (sum);
 }
 
-static void	ft_sm_philo_set2(t_sm_philo *philo)
-{
-	int	i;
-
-	i = 0;
-	while (++i <= philo[0].sum)
-	{
-		philo[i].group_sum = philo[0].group_sum;
-		philo[i].group = 1;
-		if (i % 2 == 0)
-			philo[i].group = 2;
-		philo[i].die = 0;
-		philo[i].ate_times = 0;
-		philo[i].must_eat = philo[0].must_eat;
-		philo[i].nbr = i;
-		philo[i].sum = philo[0].sum;
-		philo[i].du_die = philo[0].du_die;
-		philo[i].du_eat = philo[0].du_eat;
-		philo[i].du_sleep = philo[0].du_sleep;
-		philo[i].sem_print = philo[0].sem_print;
-	}
-	philo[--i].group = philo[0].group_sum;
-}
-
-static int	ft_sm_philo_set(t_sm_philo *philo)
-{
-	philo[0].group_sum = 3;
-	if (philo[0].sum % 2 == 0)
-		philo[0].group_sum = 2;
-	philo[0].group = philo[0].group_sum;
-	philo[0].die = 0;
-	ft_sm_philo_set2(philo);
-}
-
 //set everything, to it's value, but no mutex.
 int	ft_sm_philo_fill(int ac, char **av, t_sm_philo *philo)
 {
 	int			philo_sum;
 
 	if (ac < 5 || ac > 6)
-		return (ft_usage(), NULL);
+		return (ft_usage(), exit(EXIT_FAILURE), -99);
 	philo_sum = ft_char_to_nbr(av[1]);
 	if (philo_sum <= 0)
 		return (0);
-	philo[0].sum = philo_sum;
-	philo[0].nbr = 0;
-	philo[0].du_die = ft_char_to_nbr(av[2]);
-	philo[0].du_eat = ft_char_to_nbr(av[3]);
-	philo[0].du_sleep = ft_char_to_nbr(av[4]);
-	philo[0].must_eat = ft_char_to_nbr(av[5]);
-	if (philo[0].du_die < 0 || philo[0].du_eat < 0
-		|| philo[0].du_sleep < 0 || philo[0].must_eat == -2)
-		return (ft_usage(), 0);
-	if (philo[0].must_eat == 0)
-		return (1);
-	ft_sm_philo_set(philo);
-	return (1);
+	philo->sum = philo_sum;
+	philo->nbr = 0;
+	philo->du_die = ft_char_to_nbr(av[2]);
+	philo->du_eat = ft_char_to_nbr(av[3]);
+	philo->du_sleep = ft_char_to_nbr(av[4]);
+	philo->must_eat = ft_char_to_nbr(av[5]);
+	philo->ate_times = 0;
+	if (philo->du_die < 0 || philo->du_eat < 0
+		|| philo->du_sleep < 0 || philo->must_eat == -2)
+		return (ft_usage(), exit(EXIT_FAILURE), -99);
+	if (philo->must_eat == 0)
+		return (exit(EXIT_SUCCESS), -99);
+	philo->sem_ate_times = 0;
+	philo->sem_fork = 0;
+	philo->sem_fork_pair = 0;
+	philo->sem_print = 0;
+	philo->sem_super_prio = 0;
+	return (philo->philos = 0, 1);
 }
