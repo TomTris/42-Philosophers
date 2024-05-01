@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:38:35 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/30 23:20:00 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/01 02:07:22 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	main(int ac, char **av)
 	philo = ft_philo_fill(ac, av);
 	if (philo == 0)
 		return (1);
+	if (philo[0].must_eat == 0)
+		return (free(philo), 0);
 	if (ft_fork_n_mutex_fill(philo) == 0)
 		return (ft_destroy_n_free(philo), 1);
 	check = ft_philo_create(philo, philo[0].philo_id);
