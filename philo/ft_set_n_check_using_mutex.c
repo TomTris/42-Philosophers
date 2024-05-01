@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 13:10:07 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/30 22:54:38 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/01 17:16:11 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	ft_set_time_to_die(t_philo *philo_i)
 {
 	pthread_mutex_lock(&philo_i[0].mutex_time_to_die[0].mutex);
 	pthread_mutex_lock(&philo_i[0].mutex_die[0].mutex);
-	if (philo_i[0].die == 0)
+	if (philo_i[0].die == 0 && ft_cnt_time_to_die(philo_i)
+		< (size_t) philo_i[0].time_die)
 		gettimeofday(&philo_i[0].time_to_die, NULL);
 	pthread_mutex_unlock(&philo_i[0].mutex_die[0].mutex);
 	pthread_mutex_unlock(&philo_i[0].mutex_time_to_die[0].mutex);
@@ -53,9 +54,8 @@ struct timeval	*ft_print_out(t_philo *philo_i, char *str)
 	}
 	else if (philo_i != 0 && str != 0)
 	{
-		if (philo_i[0].nbr != 0)
-			pthread_mutex_lock(philo_i[0].mutex_print);
 		gettimeofday(&now, NULL);
+		pthread_mutex_lock(philo_i[0].mutex_print);
 		if (ft_check_die_philo(philo_i) == 0)
 			if ((printf("%ld %d %s\n", (((now.tv_sec - begin->tv_sec) * 1000)
 							+ ((now.tv_usec - begin->tv_usec) / 1000)),
