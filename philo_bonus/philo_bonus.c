@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 01:30:34 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/02 14:50:50 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 19:31:09 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,34 @@ static int	ft_set_sem(t_sm_philo *philo)
 	return (1);
 }
 
+static void	ft_alone(t_sm_philo *philo)
+{
+	pid_t			child;
+
+	child = fork();
+	if (child < 0)
+		ft_clean_programm(philo, EXIT_FAILURE);
+	else if (child == 0)
+	{
+		ft_begin(1);
+		printf("%ld 1 is thinking\n", (ft_current_time() - ft_begin(0)) / 1000);
+		printf("%ld 1 has taken a fork\n",
+			(ft_current_time() - ft_begin(0)) / 1000);
+		while (1)
+		{
+			if (ft_current_time() - ft_begin(0)
+				>= (size_t) philo->du_die * 1000)
+			{
+				printf("%ld 1 died\n",
+					(ft_current_time() - ft_begin(0)) / 1000);
+				exit(EXIT_FAILURE);
+			}
+		}
+	}
+	waitpid(-1, 0, 0);
+	ft_clean_programm(philo, EXIT_FAILURE);
+}
+
 int	main(int ac, char **av)
 {
 	t_sm_philo	philo;
@@ -75,5 +103,7 @@ int	main(int ac, char **av)
 	ft_sm_philo_fill(ac, av, &philo);
 	if (ft_set_sem(&philo) == 0)
 		return (1);
+	if (philo.sum == 1)
+		ft_alone(&philo);
 	ft_create_bonus(&philo);
 }
