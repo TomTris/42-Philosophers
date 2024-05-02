@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 21:07:21 by qdo               #+#    #+#             */
-/*   Updated: 2024/04/30 23:26:21 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 18:56:43 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,8 @@ int	ft_fork_n_mutex_fill(t_philo *philo)
 	i = 1;
 	while (++i < philo[0].sum)
 		philo[0].psfork[i].used = 2;
+	if (philo[0].sum == 1)
+		i--;
 	philo[0].psfork[i].used = philo[0].group_sum;
 	return (1);
 }

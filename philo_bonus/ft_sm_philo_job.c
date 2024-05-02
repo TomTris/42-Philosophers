@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:04:30 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/02 14:52:02 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 19:32:39 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	ft_usleep(t_sm_philo *philo_i, size_t dura)
 		if (ft_check_die(philo_i) == 1)
 		{
 			sem_wait(philo_i->sem_print);
-			printf("%ld %d die\n",
+			printf("%ld %d died\n",
 				(ft_current_time() - ft_begin(0)) / 1000, philo_i->nbr);
 			exit(EXIT_FAILURE);
 		}
@@ -65,7 +65,7 @@ static void	ft_print_out(t_sm_philo *philo_i, char *str)
 	sem_wait(philo_i->sem_print);
 	if (ft_check_die(philo_i) == 1)
 	{
-		printf("%ld %d die\n", (ft_current_time() - ft_begin(0)) / 1000,
+		printf("%ld %d died\n", (ft_current_time() - ft_begin(0)) / 1000,
 			philo_i->nbr);
 		exit(EXIT_FAILURE);
 	}

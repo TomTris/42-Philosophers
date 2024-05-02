@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 01:41:33 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/02 00:54:16 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 19:35:19 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ft_sm_philo_fill(int ac, char **av, t_sm_philo *philo)
 		return (ft_usage(), exit(EXIT_FAILURE), -99);
 	philo_sum = ft_char_to_nbr(av[1]);
 	if (philo_sum <= 0)
-		return (0);
+		return (ft_usage(), exit(EXIT_FAILURE), -99);
 	philo->sum = philo_sum;
 	philo->nbr = 0;
 	philo->du_die = ft_char_to_nbr(av[2]);

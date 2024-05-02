@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:03:28 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/01 02:07:01 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 19:16:23 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_philo	*ft_philo_fill(int ac, char **av)
 		return (ft_usage(), NULL);
 	philo_sum = ft_char_to_nbr(av[1]);
 	if (philo_sum <= 0)
-		return (0);
+		return (ft_usage(), NULL);
 	philo = (t_philo *)malloc((philo_sum + 1) * sizeof(t_philo));
 	if (philo == 0)
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 02:27:25 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/02 14:51:47 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 19:33:32 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	ft_super_ate_times(void *philo_data)
 	}
 	sem_post(philo->sem_super_prio);
 	while (1)
-		usleep(10 * 1000 * 1000);
+		usleep(75 * 1000);
 }
 
 static void	ft_philos_pid_create(t_sm_philo *philo)
