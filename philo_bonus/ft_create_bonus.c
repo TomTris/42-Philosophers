@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 02:27:25 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/02 00:54:37 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 14:51:47 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	ft_kill(t_sm_philo *philo, short i)
 	while (++j < i)
 	{
 		kill(philo->philos[j], SIGKILL);
+		sem_post(philo->sem_ate_times);
 		sem_post(philo->sem_fork);
 		sem_post(philo->sem_fork_pair);
 	}
@@ -33,15 +34,20 @@ static void	ft_parent_job(t_sm_philo *philo)
 {
 	waitpid(-1, 0, 0);
 	sem_wait(philo->sem_super_prio);
-	pthread_detach(philo->super_thread);
-	ft_kill(philo, philo->sum + 1);
-	sem_post(philo->sem_ate_times);
-	sem_post(philo->sem_super_prio);
 	if (philo->nbr == -1)
+	{
+		pthread_detach(philo->super_thread);
+		ft_kill(philo, philo->sum);
 		ft_clean_programm(philo, EXIT_SUCCESS);
+	}
+	ft_kill(philo, philo->sum + 1);
+	philo->nbr = -1;
+	sem_post(philo->sem_super_prio);
+	usleep(500 * 1000);
+	sem_wait(philo->sem_super_prio);
+	pthread_detach(philo->super_thread);
 	ft_clean_programm(philo, EXIT_FAILURE);
 }
-
 
 //philo->nbr == -1 -> ate_times reached, kill func: so that main thread wakes up
 static void	ft_super_ate_times(void *philo_data)
@@ -54,14 +60,17 @@ static void	ft_super_ate_times(void *philo_data)
 	while (++i <= philo->sum)
 		sem_wait(philo->sem_ate_times);
 	sem_wait(philo->sem_super_prio);
-	philo->nbr = -1;
-	kill(philo->philos[1], SIGKILL);
+	if (philo->nbr != -1)
+	{
+		philo->nbr = -1;
+		kill(philo->philos[philo->sum], SIGKILL);
+	}
 	sem_post(philo->sem_super_prio);
 	while (1)
-		usleep(1000000000);
+		usleep(10 * 1000 * 1000);
 }
 
-static void	ft_philos_create(t_sm_philo *philo)
+static void	ft_philos_pid_create(t_sm_philo *philo)
 {
 	philo->philos = (pid_t *)malloc((philo->sum + 1) * sizeof(pid_t));
 	if (philo->philos == 0)
@@ -72,9 +81,10 @@ void	ft_create_bonus(t_sm_philo *philo)
 {
 	int			i;
 
-	ft_philos_create(philo);
+	ft_philos_pid_create(philo);
 	ft_begin(1);
-	pthread_create(&philo->super_thread, NULL, (void *)ft_super_ate_times, (void *)philo);
+	pthread_create(&philo->super_thread, NULL,
+		(void *)ft_super_ate_times, (void *)philo);
 	i = 0;
 	while (++i <= philo->sum)
 	{
@@ -88,7 +98,7 @@ void	ft_create_bonus(t_sm_philo *philo)
 		else if (philo->philos[i] == 0)
 		{
 			philo->nbr = i;
-			philo->time_to_die = ft_current_time();
+			philo->time_to_die = ft_begin(0);
 			ft_sm_philojob(philo);
 			exit(EXIT_FAILURE);
 		}
