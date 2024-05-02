@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 01:30:34 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/02 00:52:39 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 14:50:50 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int	main(int ac, char **av)
 {
 	t_sm_philo	philo;
 
-	philo.philos = 0;
 	ft_sm_philo_fill(ac, av, &philo);
 	if (ft_set_sem(&philo) == 0)
 		return (1);

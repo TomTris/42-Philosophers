@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 02:59:09 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/01 19:07:20 by qdo              ###   ########.fr       */
+/*   Updated: 2024/05/02 12:33:49 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ size_t	ft_begin(int check)
 	if (check == 1)
 	{
 		gettimeofday(&begin_tv, 0);
-		begin = (begin_tv.tv_sec * 1000) + (begin_tv.tv_usec / 1000);
+		begin = (begin_tv.tv_sec * 1000000) + (begin_tv.tv_usec);
 	}
 	return (begin);
 }
@@ -32,5 +32,5 @@ size_t	ft_current_time(void)
 	struct timeval	current;
 
 	gettimeofday(&current, 0);
-	return ((current.tv_sec * 1000) + (current.tv_usec / 1000));
+	return ((current.tv_sec * 1000000) + (current.tv_usec));
 }
