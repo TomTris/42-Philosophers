@@ -6,7 +6,7 @@
 /*   By: qdo <qdo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:04:30 by qdo               #+#    #+#             */
-/*   Updated: 2024/05/02 19:32:39 by qdo              ###   ########.fr       */
+/*   Updated: 2024/07/05 15:00:45 by qdo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ void	ft_sm_philojob(void *philo_data)
 		ft_print_out(philo_i, "is thinking");
 		sem_wait(philo_i->sem_fork_pair);
 		sem_wait(philo_i->sem_fork);
+		ft_print_out(philo_i, "has taken a fork");
 		sem_wait(philo_i->sem_fork);
+		ft_print_out(philo_i, "has taken a fork");
 		ft_print_out(philo_i, "is eating");
 		ft_usleep(philo_i, philo_i->du_eat);
 		if (++(philo_i->ate_times) == philo_i->must_eat)
